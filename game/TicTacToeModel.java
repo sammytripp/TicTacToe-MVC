@@ -118,13 +118,19 @@ public class TicTacToeModel {
     }
 
     /** findWinner() iterates through the game grid first by rows,
-     * then by columns, to determine if there is an incidence of a full
-     * consecutive row or column of 'X' or 'O' characters
+     * then by columns, then diagonally, to determine if there is
+     * an incidence of a full consecutive row, column, or diagonal
+     * line of 'X' or 'O' characters.
      *
      * @return charToEnum value
      */
     private TicTacToeEnum findWinner(){
         TicTacToeEnum newGameState;
+
+        // If the game board is full, return DRAW
+        if (this.nMarks == (this.nRows * this.nColumns)) return TicTacToeEnum.DRAW;
+
+        // else, search for a winner
         for (int i = 0; i < nRows; i++){
             for (int j = 0; j < nColumns; j++){
                 if (grid[i][j] != ' '){
@@ -136,53 +142,53 @@ public class TicTacToeModel {
         }
         return TicTacToeEnum.IN_PROGRESS;
     }
-    /** An internal (private) method that looks for the winner, starting
-     *  from a given location.  A winner is a horizontal or vertical row
-     *  starting from the given location. Diagonals are not implemented.
-     *  Interested students are encouraged to complete it.
+
+
+    /** Internal method to determine if there is a game winner
+     * by first searching horizontally, then vertically, then diagonally,
+     * from the indicated starting position on the game grid.
      *
-     * Hence the method being made private. The method is used for readability.
-     * @param    row      Where to start search
-     * @param    column   Where to start search
+     * @param    row
+     * @param    column
      * @return   IN_PROGRESS, X_WON, 0_WON, DRAW
      */
     private TicTacToeEnum findWinnerFrom(int row, int column) {
-
-        // Look horizontally - left than right
-
         int count;
 
+        // Horizontal check - look left
         count = 1;
-        for (int c = column-1; c > 0; c--) {
+        for (int c = column - 1; c > 0; c--) {
             if (this.grid[row][column] == this.grid[row][c]) {
                 count++;
                 if (count == this.numToWin) {
                     return charToEnum(grid[row][column]);
                 }
-            } // else, look in another direction
+            }
         }
 
+        // Horizontal check - look right
         count = 1;
-        for (int c = column+1; c < this.nColumns; c++) {
+        for (int c = column + 1; c < this.nColumns; c++) {
             if (this.grid[row][column] == this.grid[row][c]) {
                 count++;
                 if (count == this.numToWin) {
                     return charToEnum(grid[row][column]);
                 }
-            } // else, look in another direction
+            }
         }
 
-        // Look vertically - up then down
+        // Vertical check - look up
         count = 1;
-        for (int r = row-1; r > 0; r--) {
+        for (int r = row - 1; r > 0; r--) {
             if (this.grid[r][column] == this.grid[row][column]) {
                 count++;
                 if (count == this.numToWin) {
                     return charToEnum(grid[row][column]);
                 }
-            } // else, look in another direction
+            }
         }
 
+        // Vertical check - look down
         count = 1;
         for (int r = row+1; r < this.nRows; r++) {
             if (this.grid[row][column] == this.grid[r][column]) {
@@ -190,18 +196,37 @@ public class TicTacToeModel {
                 if (count == this.numToWin) {
                     return charToEnum(grid[row][column]);
                 }
-            } // else, look in another direction
+            }
         }
 
-        // Look diagonally - Left-down - TBD
-
-        // Look diagonally - Right-down - TBD
-
-        if (this.nMarks == (this.nRows*this.nColumns)){
-            return TicTacToeEnum.DRAW;
+        // Diagonal check - upper left corner to lower right corner
+        count = 0;
+        for (int r = 0, c = 0; r < this.nRows; r++){
+            if (this.grid[row][column] == this.grid[r][c]) {
+                count++;
+                if (count == this.numToWin) {
+                    return charToEnum(grid[row][column]);
+                }
+            }
+            c++;
         }
+
+        // Diagonal check - upper right corner to lower left corner
+        count = 0;
+        for (int r = this.nRows - 1, c = this.nColumns - 1; r > 0; r--){
+            if (this.grid[row][column] == this.grid[r][c]) {
+                count++;
+                if (count == this.numToWin) {
+                    return charToEnum(grid[row][column]);
+                }
+            }
+            c--;
+        }
+
+        // No winner detected - the game is still in progress
         return TicTacToeEnum.IN_PROGRESS;
     }
+
 
     /** toString formats the 2-dimensional TicTacToe grid array as a string
      *
