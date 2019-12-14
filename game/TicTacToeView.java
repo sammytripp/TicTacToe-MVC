@@ -11,14 +11,18 @@ public class TicTacToeView extends JFrame{
 
     // JPanels
     private JPanel buttonGrid;
-    private JPanel statusMessage;
+    private JPanel messagePanel;
 
     // JMenuItems
-    private JMenuItem openMenuItem;
     private JMenuItem saveMenuItem;
+    private JMenuItem openMenuItem;
+    private JMenuItem quitMenuItem;
+    private JMenuItem restartMenuItem;
+    private JMenuItem gridSizeMenuItem;
 
-    // JLabel game message
-    private JLabel message;
+    // JButtons
+    private final int BUTTON_SIZE = 100;
+    private JButton[][] buttons;
 
     /**
      * Constructor for TicTacToeView objects.
@@ -28,7 +32,8 @@ public class TicTacToeView extends JFrame{
      */
     public TicTacToeView(TicTacToeModel model, int size) {
         this.model = model;
-        this.gridLayout = new GridLayout(size, size);
+        this.buttons = new JButton[size][size];
+        gridLayout = new GridLayout(size, size);
         initializeGUI();
     }
 
@@ -39,28 +44,29 @@ public class TicTacToeView extends JFrame{
 
         model.addView(this); // Subscribe to model
         setTitle("Tic Tac Toe");
+
         // Initialize button grid layout for Tic Tac Toe game grid
         buttonGrid = new JPanel();
         buttonGrid.setLayout(gridLayout);
 
         //Initialize output message panel
-        statusMessage = new JPanel();
-        message = new JLabel(model.getTurn() + ": Click where you would like to mark.");
-        statusMessage.add(message);
+        messagePanel = new JPanel();
+        JLabel message = new JLabel(model.getTurn() + ": Click where you would like to mark.");
+        messagePanel.add(message);
 
         // Add GUI components to JFrame
         add(buttonGrid, BorderLayout.CENTER);
-        add(statusMessage, BorderLayout.SOUTH);
+        add(messagePanel, BorderLayout.SOUTH);
+
+        initializeMenuBar();
+        initializeButtons();
 
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setSize(600, 700);
+        setSize(model.getSize() * BUTTON_SIZE, (model.getSize() * BUTTON_SIZE) + BUTTON_SIZE);
         setVisible(true);
         setLocationRelativeTo(null);
-
-        initializeMenuBar();
-        initializeButtons();
     }
 
     /**
@@ -71,11 +77,34 @@ public class TicTacToeView extends JFrame{
         setJMenuBar(menu); // Attach menu bar to the frame
 
         JMenu fileMenu = new JMenu("File");
+        menu.add(fileMenu);
+        this.saveMenuItem = new JMenuItem("Save");
+        fileMenu.add(saveMenuItem);
+        this.openMenuItem = new JMenuItem("Open");
+        fileMenu.add(openMenuItem);
+        this.restartMenuItem = new JMenuItem("Restart Game");
+        fileMenu.add(restartMenuItem);
+        this.quitMenuItem = new JMenuItem("Quit");
+        fileMenu.add(quitMenuItem);
 
+
+        JMenu editMenu = new JMenu("Edit");
+        menu.add(editMenu);
+        this.gridSizeMenuItem = new JMenuItem("Change Grid Size");
+        editMenu.add(gridSizeMenuItem);
     }
 
     private void initializeButtons() {
-
+        // Create each JButton in the array
+        for (int i = 0; i < this.model.getSize(); i++){
+            for (int j = 0; j < this.model.getSize(); j++){
+                JButton button = new JButton();
+                buttons[i][j] = button;
+                button.setSize(BUTTON_SIZE, BUTTON_SIZE);
+                button.setIcon(null);
+                buttonGrid.add(button);
+            }
+        }
     }
 
     public void update(TicTacToeMoveEvent event){
