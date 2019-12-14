@@ -1,5 +1,6 @@
 
-import java.util.Scanner;
+import java.util.*;
+
 
 public class TicTacToeModel {
 
@@ -11,6 +12,9 @@ public class TicTacToeModel {
 
     TicTacToeEnum gameState;
 
+    // View objects subscribed to the Model
+    private List<TicTacToeView> views;
+
 
     /**Default TicTacToe constructor of a 3x3 game grid
      *
@@ -19,7 +23,7 @@ public class TicTacToeModel {
      */
     public TicTacToeModel(char initialTurn){
 
-        this(3,3,3,initialTurn);
+        this(3,3,3, initialTurn);
     }
 
     /**Four-argument constructor of a nRows by nColumns game grid
@@ -39,6 +43,7 @@ public class TicTacToeModel {
         this.nColumns = nColumns;
         this.numToWin = numToWin;
         this.grid = new char[nRows][nColumns];
+        this.views = new ArrayList<TicTacToeView>();
         reset(initialTurn);
     }
 
@@ -59,6 +64,42 @@ public class TicTacToeModel {
         this.gameState = TicTacToeEnum.IN_PROGRESS;
     }
 
+    /**
+     * Add a TicTacToeView object to the notification list.
+     *
+     * @param view
+     */
+    public void addView(TicTacToeView view){
+        this.views.add(view);
+    }
+
+    /**
+     * Remove a TicTacToeView object from the notification list.
+     * @param view
+     */
+    public void removeView(TicTacToeView view){
+        this.views.remove(view);
+    }
+
+    /**
+     * Returns the notification list of TicTacToeView objects.
+     *
+     * @return list of subscribed TicTacToeView objects
+     */
+    public List<TicTacToeView> getViews() {
+        return this.views;
+    }
+
+    /**
+     * Sends an event to notify TicTacToeView objects of any changes.
+     * @param event
+     */
+    public void notifyViews(TicTacToeMoveEvent event){
+        for (TicTacToeView view: this.views){
+            view.update(event);
+        }
+    }
+
     /**getTurn() returns the current player
      *
      * @return 'X' or 'O'
@@ -75,6 +116,10 @@ public class TicTacToeModel {
     public TicTacToeEnum getGameState(){
         return this.gameState;
     }
+
+    public int getRows() { return this.nRows; }
+
+    public int getColumns() { return this.nColumns; }
 
     /**charToEnum facilitates the return of the corresponding ENUM to inform
      * the findWinner() method which updates the game state
@@ -232,6 +277,7 @@ public class TicTacToeModel {
      *
      * @return TicTacToe board in string formatting
      */
+    @Override
     public String toString(){
         String s = "";
         for (int i = 0; i < this.nRows; i++){
