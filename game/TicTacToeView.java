@@ -16,8 +16,8 @@ public class TicTacToeView extends JFrame{
     // JMenuItems
     private JMenuItem saveMenuItem;
     private JMenuItem openMenuItem;
-    private JMenuItem quitMenuItem;
     private JMenuItem restartMenuItem;
+    private JMenuItem quitMenuItem;
     private JMenuItem gridSizeMenuItem;
 
     // JButtons
@@ -110,6 +110,41 @@ public class TicTacToeView extends JFrame{
     public void update(TicTacToeMoveEvent event){
 
     }
+
+    /**
+     * Returns "Save" JMenuItem.
+     *
+     * @return saveMenuItem
+     */
+    public JMenuItem getSaveMenuItem() { return this.saveMenuItem; }
+
+    /**
+     * Returns "Open" JMenuItem.
+     *
+     * @return openMenuItem
+     */
+    public JMenuItem getOpenMenuItem() { return this.openMenuItem; }
+
+    /**
+     * Returns "Restart" JMenuItem.
+     *
+     * @return restartMenuItem
+     */
+    public JMenuItem getRestartMenuItem() { return this.restartMenuItem; }
+
+    /**
+     * Returns "Quit" JMenuItem.
+     *
+     * @return quitMenuItem
+     */
+    public JMenuItem getQuitMenuItem() { return this.quitMenuItem; }
+
+    /**
+     * Returns "Change Grid Size" JMenuItem.
+     *
+     * @return gridSizeMenuItem
+     */
+    public JMenuItem getGridSizeMenuItem() { return this.gridSizeMenuItem; }
 
 
 
