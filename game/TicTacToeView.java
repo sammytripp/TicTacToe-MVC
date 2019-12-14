@@ -24,12 +24,11 @@ public class TicTacToeView extends JFrame{
      * Constructor for TicTacToeView objects.
      *
      * @param model
-     * @param nRows
-     * @param nColumns
+     * @param size of TicTacToeModel grid
      */
-    public TicTacToeView(TicTacToeModel model, int nRows, int nColumns) {
+    public TicTacToeView(TicTacToeModel model, int size) {
         this.model = model;
-        this.gridLayout = new GridLayout(nRows, nColumns);
+        this.gridLayout = new GridLayout(size, size);
         initializeGUI();
     }
 

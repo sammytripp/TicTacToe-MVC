@@ -4,11 +4,11 @@ import java.util.*;
 
 public class TicTacToeModel {
 
-    private int nRows, nColumns; //Dimensions of grid
-    private int numToWin;        //Number of adjacent checkers to be winner (Must be less than dimensions)
-    private int nMarks;          //Number of plays made
-    private char turn;          //X or O
-    private char[][] grid;      //EMPTY, X or O
+    private int size; // Dimensions of square grid (size x size)
+    private int numToWin;        // Number of adjacent checkers to be winner
+    private int nMarks;          // Number of plays made
+    private char turn;          // 'X' or 'O'
+    private char[][] grid;      // EMPTY, 'X' or 'O'
 
     TicTacToeEnum gameState;
 
@@ -23,27 +23,22 @@ public class TicTacToeModel {
      */
     public TicTacToeModel(char initialTurn){
 
-        this(3,3,3, initialTurn);
+        this(3, initialTurn);
     }
 
     /**Four-argument constructor of a nRows by nColumns game grid
      *
-     * @param nRows
-     * @param nColumns
-     * @param numToWin
+     * @param size
      * @param initialTurn
      */
-    public TicTacToeModel(int nRows, int nColumns, int numToWin, char initialTurn){
+    public TicTacToeModel(int size, char initialTurn){
 
-        if(nRows < 0 || nColumns < 0)
+        if(size < 0)
             throw new IllegalArgumentException("Grid must be a positive size.");
-        if (numToWin > nRows || numToWin > nColumns)
-            throw new IllegalArgumentException("numToWin must be less than dimensions.");
-        this.nRows = nRows;
-        this.nColumns = nColumns;
-        this.numToWin = numToWin;
-        this.grid = new char[nRows][nColumns];
-        this.views = new ArrayList<TicTacToeView>();
+        this.size = size;
+        this.numToWin = size;
+        this.grid = new char[size][size];
+        this.views = new ArrayList<>();
         reset(initialTurn);
     }
 
@@ -54,8 +49,8 @@ public class TicTacToeModel {
      */
     public void reset(char initialTurn){
 
-        for(int i = 0; i < this.nRows; i++){
-            for (int j = 0; j < this.nColumns; j++){
+        for(int i = 0; i < this.size; i++){
+            for (int j = 0; j < this.size; j++){
                 this.grid[i][j] = ' ';
             }
         }
@@ -108,7 +103,8 @@ public class TicTacToeModel {
         return this.turn;
     }
 
-    /**getGameState() returns the TicTacToe ENUM to indicate if there is a
+    /**
+     * Returns the TicTacToe ENUM to indicate if there is a
      * winner, draw, or if the game is still in progress
      *
      * @return TicTacToe ENUM Value
@@ -117,9 +113,13 @@ public class TicTacToeModel {
         return this.gameState;
     }
 
-    public int getRows() { return this.nRows; }
+    /**
+     * Returns the dimension size of the game grid.
+     *
+     * @return
+     */
+    public int getSize() { return this.size; }
 
-    public int getColumns() { return this.nColumns; }
 
     /**charToEnum facilitates the return of the corresponding ENUM to inform
      * the findWinner() method which updates the game state
@@ -144,10 +144,8 @@ public class TicTacToeModel {
     public TicTacToeEnum takeTurn(int row, int column){
         if(this.gameState != TicTacToeEnum.IN_PROGRESS)
             throw new IllegalArgumentException("Game is over.");
-        if(row < 0 || row > this.nRows)
-            throw new IllegalArgumentException("Grid is " + this.nRows + " by " + this.nColumns);
-        if(column < 0 || column > this.nColumns)
-            throw new IllegalArgumentException("Grid is " + this.nRows + " by " + this.nColumns);
+        if(row < 0 || row > this.size || column < 0 || column > this.size)
+            throw new IllegalArgumentException("Grid is " + this.size + " by " + this.size);
         if(this.grid[row][column] != ' ')
             throw new IllegalArgumentException("Location is already full.");
         this.grid[row][column] = getTurn();
@@ -173,11 +171,11 @@ public class TicTacToeModel {
         TicTacToeEnum newGameState;
 
         // If the game board is full, return DRAW
-        if (this.nMarks == (this.nRows * this.nColumns)) return TicTacToeEnum.DRAW;
+        if (this.nMarks == (this.size * this.size)) return TicTacToeEnum.DRAW;
 
         // else, search for a winner
-        for (int i = 0; i < nRows; i++){
-            for (int j = 0; j < nColumns; j++){
+        for (int i = 0; i < this.size; i++){
+            for (int j = 0; j < this.size; j++){
                 if (grid[i][j] != ' '){
                     newGameState = findWinnerFrom(i,j);
                     if (newGameState != TicTacToeEnum.IN_PROGRESS)
@@ -213,7 +211,7 @@ public class TicTacToeModel {
 
         // Horizontal check - look right
         count = 1;
-        for (int c = column + 1; c < this.nColumns; c++) {
+        for (int c = column + 1; c < this.size; c++) {
             if (this.grid[row][column] == this.grid[row][c]) {
                 count++;
                 if (count == this.numToWin) {
@@ -235,7 +233,7 @@ public class TicTacToeModel {
 
         // Vertical check - look down
         count = 1;
-        for (int r = row+1; r < this.nRows; r++) {
+        for (int r = row+1; r < this.size; r++) {
             if (this.grid[row][column] == this.grid[r][column]) {
                 count++;
                 if (count == this.numToWin) {
@@ -246,7 +244,7 @@ public class TicTacToeModel {
 
         // Diagonal check - upper left corner to lower right corner
         count = 0;
-        for (int r = 0, c = 0; r < this.nRows; r++){
+        for (int r = 0, c = 0; r < this.size; r++){
             if (this.grid[row][column] == this.grid[r][c]) {
                 count++;
                 if (count == this.numToWin) {
@@ -258,7 +256,7 @@ public class TicTacToeModel {
 
         // Diagonal check - upper right corner to lower left corner
         count = 0;
-        for (int r = this.nRows - 1, c = this.nColumns - 1; r > 0; r--){
+        for (int r = this.size - 1, c = this.size - 1; r > 0; r--){
             if (this.grid[row][column] == this.grid[r][c]) {
                 count++;
                 if (count == this.numToWin) {
@@ -280,8 +278,8 @@ public class TicTacToeModel {
     @Override
     public String toString(){
         String s = "";
-        for (int i = 0; i < this.nRows; i++){
-            for (int j = 0; j < this.nColumns; j++){
+        for (int i = 0; i < this.size; i++){
+            for (int j = 0; j < this.size; j++){
                 s += grid[i][j] + " | ";
             }
             s += "\n";

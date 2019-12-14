@@ -7,6 +7,6 @@ public class TicTacToeController extends DefaultHandler {
 
     public TicTacToeController(TicTacToeModel model){
         this.model = model;
-        this.view = new TicTacToeView(model, model.getRows(), model.getColumns());
+        this.view = new TicTacToeView(model, model.getSize());
     }
 }
