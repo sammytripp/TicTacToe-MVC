@@ -1,5 +1,7 @@
 import java.awt.*;
+import java.io.File;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TicTacToeView extends JFrame{
 
@@ -12,6 +14,9 @@ public class TicTacToeView extends JFrame{
     // JPanels
     private JPanel buttonGrid;
     private JPanel messagePanel;
+
+    // JLabel
+    private JLabel message;
 
     // JMenuItems
     private JMenuItem saveMenuItem;
@@ -51,7 +56,7 @@ public class TicTacToeView extends JFrame{
 
         //Initialize output message panel
         messagePanel = new JPanel();
-        JLabel message = new JLabel(model.getTurn() + ": Click where you would like to mark.");
+        message = new JLabel(model.getTurn() + ": Click where you would like to mark.");
         messagePanel.add(message);
 
         // Add GUI components to JFrame
@@ -107,8 +112,95 @@ public class TicTacToeView extends JFrame{
         }
     }
 
-    public void update(TicTacToeMoveEvent event){
+    public void update(TicTacToeEnum gameState) {
+        updateButtons();
+        if(gameState.equals(TicTacToeEnum.O_WON)) {
+            gameWinner("O");
+        } else if(gameState.equals(TicTacToeEnum.X_WON)) {
+            gameWinner("X");
+        } else if (gameState.equals(TicTacToeEnum.DRAW)) {
+            gameDraw();
+        } else { // Game in progress
+            updateMessagePanel();
+        }
+    }
 
+    public void updateButtons() {
+
+    }
+
+    /**
+     * Updates message panel with instructions for the current player.
+     *
+     */
+    public void updateMessagePanel() {
+        message.setText(model.getTurn() + ": Click where you would like to mark.");
+    }
+
+    /**
+     * Returns the 2D array of JButton objects.
+     *
+     * @return buttons
+     */
+    public JButton[][] getButtons(){
+        return this.buttons;
+    }
+
+    /**
+     * Prompt the user to enter a file name.
+     *
+     * @return fileName
+     */
+    public String getFileName() {
+        String fileName = JOptionPane.showInputDialog("Save file as:");
+        return fileName + ".txt";
+    }
+
+    /**
+     * GUI to select file to open.
+     *
+     * @return fileName
+     */
+    public String openFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        // Only allow .txt files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+        fileChooser.setFileFilter(filter);
+        // Start in home directory
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // user selects a file
+            return fileChooser.getSelectedFile().getName();
+        } else {
+            // no file selected successfully
+            return null;
+        }
+    }
+
+    /**
+     * Displays winner and prompts user to start a new game.
+     *
+     * @param winner
+     */
+    public void gameWinner(String winner){
+        JOptionPane.showInternalConfirmDialog(this,
+                winner + " is the winner! Would you like to play again?",
+                winner + "won", JOptionPane.YES_NO_OPTION);
+
+    }
+
+    public void gameDraw(){
+
+    }
+
+    /**
+     * Displays an error message to the user (i.e. illegal move, invalid file name, etc).
+     *
+     * @param errorMessage
+     */
+    public void showErrorMessage(String errorMessage){
+        JOptionPane.showMessageDialog(this, errorMessage);
     }
 
     /**

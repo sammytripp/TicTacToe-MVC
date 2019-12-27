@@ -1,9 +1,11 @@
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class TicTacToeModel {
+public class TicTacToeModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private int size; // Dimensions of square grid (size x size)
     private int numToWin;        // Number of adjacent checkers to be winner
     private int nMarks;          // Number of plays made
@@ -87,11 +89,11 @@ public class TicTacToeModel {
 
     /**
      * Sends an event to notify TicTacToeView objects of any changes.
-     * @param event
+     *
      */
-    public void notifyViews(TicTacToeMoveEvent event){
+    public void notifyViews(){
         for (TicTacToeView view: this.views){
-            view.update(event);
+            view.update(getGameState());
         }
     }
 
