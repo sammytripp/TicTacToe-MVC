@@ -88,7 +88,7 @@ public class TicTacToeModel implements Serializable {
     }
 
     /**
-     * Sends an event to notify TicTacToeView objects of any changes.
+     * Notify TicTacToeView objects of any game state changes and update grid.
      *
      */
     public void notifyViews(){
@@ -141,23 +141,28 @@ public class TicTacToeModel implements Serializable {
      *
      * @param row entered by player
      * @param column entered by player
+     * @throws IllegalArgumentException
      * @return resulting game status
      */
-    public TicTacToeEnum takeTurn(int row, int column){
+    public TicTacToeEnum takeTurn(int row, int column) throws IllegalArgumentException {
         if(this.gameState != TicTacToeEnum.IN_PROGRESS)
             throw new IllegalArgumentException("Game is over.");
         if(row < 0 || row > this.size || column < 0 || column > this.size)
             throw new IllegalArgumentException("Grid is " + this.size + " by " + this.size);
         if(this.grid[row][column] != ' ')
             throw new IllegalArgumentException("Location is already full.");
-        this.grid[row][column] = getTurn();
-        this.nMarks++;
 
+        // Legal location - take turn
+        this.grid[row][column] = getTurn();
+        // Increment moves taken
+        this.nMarks++;
+        // Switch player
         if (getTurn() == 'X'){
             this.turn = 'O';
         } else if (getTurn() == 'O') {
             this.turn = 'X';
         }
+        // Determine resulting game state
         this.gameState = findWinner();
         return this.gameState;
     }
@@ -282,9 +287,8 @@ public class TicTacToeModel implements Serializable {
         String s = "";
         for (int i = 0; i < this.size; i++){
             for (int j = 0; j < this.size; j++){
-                s += grid[i][j] + " | ";
+                s += grid[i][j];
             }
-            s += "\n";
         }
         return s;
     }

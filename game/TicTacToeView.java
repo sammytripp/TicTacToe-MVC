@@ -110,6 +110,7 @@ public class TicTacToeView extends JFrame{
                 buttonGrid.add(button);
             }
         }
+        updateButtons();
     }
 
     public void update(TicTacToeEnum gameState) {
@@ -126,7 +127,30 @@ public class TicTacToeView extends JFrame{
     }
 
     public void updateButtons() {
+        // Get string representation of game grid
+        String  grid = model.toString();
+        // Debugging
+        System.out.println(grid);
 
+        // Update any buttons with the corresponding 'X' or 'O' marker
+        int offset = 0;
+        for (int i = 0; i < this.model.getSize(); i++) {
+            for (int j = 0; j < this.model.getSize(); j++) {
+                offset = j + (i * model.getSize());
+                // Select character
+                String character = String.valueOf(grid.charAt(offset));
+
+                // Set character text at JButton
+                switch (character) {
+                    case "X":
+                        buttons[i][j].setText("X");
+                        break;
+                    case "O":
+                        buttons[i][j].setText("O");
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -184,14 +208,20 @@ public class TicTacToeView extends JFrame{
      * @param winner
      */
     public void gameWinner(String winner){
-        JOptionPane.showInternalConfirmDialog(this,
+        JOptionPane.showConfirmDialog(this ,
                 winner + " is the winner! Would you like to play again?",
                 winner + "won", JOptionPane.YES_NO_OPTION);
 
     }
 
+    /**
+     * Notifies the user of a draw and prompts user to start a new game.
+     *
+     */
     public void gameDraw(){
-
+        JOptionPane.showConfirmDialog(this,
+                "Draw! Would you like to play again?",
+                "Draw", JOptionPane.YES_NO_OPTION);
     }
 
     /**
@@ -237,7 +267,5 @@ public class TicTacToeView extends JFrame{
      * @return gridSizeMenuItem
      */
     public JMenuItem getGridSizeMenuItem() { return this.gridSizeMenuItem; }
-
-
 
 }
