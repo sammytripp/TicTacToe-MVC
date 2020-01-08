@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -148,6 +149,8 @@ public class TicTacToeView extends JFrame{
                     case "O":
                         buttons[i][j].setText("O");
                         break;
+                    case " ":
+                        buttons[i][j].setText(" ");
                 }
             }
         }
@@ -203,14 +206,31 @@ public class TicTacToeView extends JFrame{
     }
 
     /**
+     * Prompts user to enter an integer indicating the desired square grid dimensions.
+     *
+     * @return New grid dimension size
+     */
+    public int changeGridSize() {
+        String size = JOptionPane.showInputDialog("Enter new grid size (integer): ");
+        return Integer.parseInt(size);
+    }
+
+    /**
      * Displays winner and prompts user to start a new game.
      *
      * @param winner
      */
     public void gameWinner(String winner){
-        JOptionPane.showConfirmDialog(this ,
+        int result = JOptionPane.showConfirmDialog(this ,
                 winner + " is the winner! Would you like to play again?",
                 winner + "won", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            // Reset game
+            restartGame();
+        } else {
+            // close window
+            closeWindow();
+        }
 
     }
 
@@ -219,10 +239,42 @@ public class TicTacToeView extends JFrame{
      *
      */
     public void gameDraw(){
-        JOptionPane.showConfirmDialog(this,
+        int result = JOptionPane.showConfirmDialog(this,
                 "Draw! Would you like to play again?",
                 "Draw", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            // Reset game
+            restartGame();
+        } else {
+            // close window
+            closeWindow();
+
+        }
     }
+
+    /**
+     * Restarts the TicTacToe game by resetting the model and updating the buttons.
+     *
+     */
+    public void restartGame() {
+        // Randomize initial turn
+        if (((int) Math.random() % 2) == 0) {
+            model.reset('X');
+        } else {
+            model.reset('O');
+        }
+        updateButtons();
+    }
+
+    /**
+     * Creates a WindowEvent to close the frame and end program execution.
+     *
+     */
+    public void closeWindow() {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+
 
     /**
      * Displays an error message to the user (i.e. illegal move, invalid file name, etc).
