@@ -1,8 +1,6 @@
-import org.xml.sax.helpers.DefaultHandler;
 
+import org.xml.sax.helpers.DefaultHandler;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 
 public class TicTacToeController extends DefaultHandler {

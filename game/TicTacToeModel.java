@@ -177,9 +177,6 @@ public class TicTacToeModel implements Serializable {
     private TicTacToeEnum findWinner(){
         TicTacToeEnum newGameState;
 
-        // If the game board is full, return DRAW
-        if (this.nMarks == (this.size * this.size)) return TicTacToeEnum.DRAW;
-
         // else, search for a winner
         for (int i = 0; i < this.size; i++){
             for (int j = 0; j < this.size; j++){
@@ -190,6 +187,10 @@ public class TicTacToeModel implements Serializable {
                 }
             }
         }
+        // If the game board is full, return DRAW
+        if (this.nMarks == (this.size * this.size)) return TicTacToeEnum.DRAW;
+
+        // Game is still in progress
         return TicTacToeEnum.IN_PROGRESS;
     }
 
@@ -240,7 +241,7 @@ public class TicTacToeModel implements Serializable {
 
         // Vertical check - look down
         count = 1;
-        for (int r = row+1; r < this.size; r++) {
+        for (int r = row + 1; r < this.size; r++) {
             if (this.grid[row][column] == this.grid[r][column]) {
                 count++;
                 if (count == this.numToWin) {
@@ -263,7 +264,7 @@ public class TicTacToeModel implements Serializable {
 
         // Diagonal check - upper right corner to lower left corner
         count = 0;
-        for (int r = this.size - 1, c = this.size - 1; r > 0; r--){
+        for (int r = 0, c = this.size - 1; r < this.size; r++){
             if (this.grid[row][column] == this.grid[r][c]) {
                 count++;
                 if (count == this.numToWin) {
