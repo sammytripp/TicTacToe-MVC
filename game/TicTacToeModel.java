@@ -12,7 +12,7 @@ public class TicTacToeModel implements Serializable {
     private char turn;          // 'X' or 'O'
     private char[][] grid;      // EMPTY, 'X' or 'O'
 
-    TicTacToeEnum gameState;
+    private TicTacToeEnum gameState;
 
     // View objects subscribed to the Model
     private List<TicTacToeView> views;
@@ -32,8 +32,9 @@ public class TicTacToeModel implements Serializable {
      *
      * @param size
      * @param initialTurn
+     * @throws IllegalArgumentException
      */
-    public TicTacToeModel(int size, char initialTurn){
+    public TicTacToeModel(int size, char initialTurn) throws IllegalArgumentException{
 
         if(size < 0)
             throw new IllegalArgumentException("Grid must be a positive size.");
@@ -49,9 +50,9 @@ public class TicTacToeModel implements Serializable {
      * @param initialTurn indicates whether 'X' or 'O' will play first during
      * the next game
      */
-    public void reset(char initialTurn){
+    public void reset(char initialTurn) {
 
-        for(int i = 0; i < this.size; i++){
+        for(int i = 0; i < this.size; i++) {
             for (int j = 0; j < this.size; j++){
                 this.grid[i][j] = ' ';
             }
@@ -127,9 +128,10 @@ public class TicTacToeModel implements Serializable {
      * the findWinner() method which updates the game state
      *
      * @param player 'X' or player 'O'
+     * @throws IllegalArgumentException
      * @return TicTacToe ENUM
      */
-    private TicTacToeEnum charToEnum(char player){
+    private TicTacToeEnum charToEnum(char player) throws IllegalArgumentException {
         if(player == 'X') return TicTacToeEnum.X_WON;
         if(player == 'O') return TicTacToeEnum.O_WON;
         throw new IllegalArgumentException("charToEnum("+player+"): player must be either X or O");
@@ -295,7 +297,7 @@ public class TicTacToeModel implements Serializable {
     }
 
 
-    /**TicTacToe simulation example
+    /** TicTacToe simulation example
      *
      * @param args
      */

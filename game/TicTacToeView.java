@@ -28,7 +28,7 @@ public class TicTacToeView extends JFrame{
     private JMenuItem gridSizeMenuItem;
 
     // JButtons
-    private final int BUTTON_SIZE = 100;
+    private final static int BUTTON_SIZE = 100;
     private JButton[][] buttons;
 
     /**
