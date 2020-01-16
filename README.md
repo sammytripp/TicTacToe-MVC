@@ -2,12 +2,13 @@
 
 SYSC 3110 - Carleton University
 
-A simple Tic Tac Toe implementation created for the purpose of practicing the Model View Controller pattern in Java. 
+A simple Tic Tac Toe implementation created for the purpose of practicing the Model-View-Controller pattern, and the Swing GUI toolkit. 
 
-### UML Class Diagram
+## UML Class Diagram
 
 ![Tic Tac Toe class diagram](TicTacToe_ClassDiagram.png)
 
-### Known Issues
+## Roadmap
 
-- Detection of diagonal line from top R to bottom L [FIXED]
+- Detection of diagonal win [COMPLETE]
+- Complete JUnit test suite of model
